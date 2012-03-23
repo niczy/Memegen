@@ -17,16 +17,13 @@
 import webapp2
 from controllers import images
 from controllers import api
-import controllers
-
-
-class MainHandler(webapp2.RequestHandler):
-    def get(self):
-        self.response.out.write('Hello world!')
-
+from controllers import page
+import jinja2
+import os
 
 app = webapp2.WSGIApplication([
-    ('/', MainHandler),
+    ('/', page.PageHandler),
+    ('/(.*)', page.PageHandler),
     ('/api/meme', api.ApiMeme), # Get/Post a Meme.
     ('/i/upload', images.UploadHandler),
     ('/i/download/([^/]+)?', images.DownloadHandler),
