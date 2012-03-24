@@ -9,17 +9,17 @@ from google.appengine.ext import webapp
 
 MAX_LIST_SIZE = 1000
 
-def GetPopularMemes():
-    
-def GetPopularMemes():
-    if not uid: return []
-    memes = db.GqlQuery("SELECT * FROM Meme "
-                        "WHERE uid == :1", uid)
+def get_latest_memes():
+    memes = db.Query(Meme).order("-date").fetch(MAX_LIST_SIZE)
+    return memes
+
+def get_popular_memes():
+    memes = db.Query(Meme).order("-like").fetch(MAX_LIST_SIZE)
     return memes
     
-def GetMemesByUid(uid):
+def ge_memes_by_uid(uid):
     if not uid: return []
-    memes = db.GqlQuery("SELECT * FROM Meme WHERE uid == :1 LIMIT :2", uid, MAX_LIST_SIZE)
+    memes = db.Query(Meme).filter("uid =", uid).order("-date").fetch(MAX_LIST_SIZE)
     return memes
     
 class Meme(db.Model):
