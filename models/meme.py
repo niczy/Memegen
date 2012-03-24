@@ -10,8 +10,6 @@ from google.appengine.ext import webapp
 MAX_LIST_SIZE = 1000
 
 def GetPopularMemes():
-    
-def GetPopularMemes():
     if not uid: return []
     memes = db.GqlQuery("SELECT * FROM Meme "
                         "WHERE uid == :1", uid)
