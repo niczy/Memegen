@@ -28,6 +28,7 @@ app = webapp2.WSGIApplication([
     ('/i/upload', images.UploadHandler),
     ('/i/download/([^/]+)?', images.DownloadHandler),
     ('/i/serve/([^/]+)?', images.ServeHandler),
+    ('/makememe', page.MakeMeme),
     ('/upload', images.UploadPageHandler),
     ('/([^/]+)', page.PageHandler)
 ],debug=True)
