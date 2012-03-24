@@ -44,5 +44,6 @@ class ServeHandler(webapp2.RequestHandler):
 
                 self.response.headers['Content-Type'] = 'image/jpeg'
                 self.response.out.write(thumbnail)
+                #self.response.out.write(images.get_serving_url(blob_key, 20))
                 return
         self.error(404)

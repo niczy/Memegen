@@ -23,10 +23,10 @@ import os
 
 app = webapp2.WSGIApplication([
     ('/', page.PageHandler),
-    ('/(.*)', page.PageHandler),
     ('/api/meme', api.ApiMeme), # Get/Post a Meme.
     ('/i/upload', images.UploadHandler),
     ('/i/download/([^/]+)?', images.DownloadHandler),
     ('/i/serve/([^/]+)?', images.ServeHandler),
-    ('/upload', images.UploadPageHandler)
+    ('/upload', images.UploadPageHandler),
+    ('/[^/]+', page.PageHandler)
 ],debug=True)
