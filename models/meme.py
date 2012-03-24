@@ -7,6 +7,21 @@ Created on Mar 24, 2012
 from google.appengine.ext import db
 from google.appengine.ext import webapp
 
+MAX_LIST_SIZE = 1000
+
+def GetPopularMemes():
+    
+def GetPopularMemes():
+    if not uid: return []
+    memes = db.GqlQuery("SELECT * FROM Meme "
+                        "WHERE uid == :1", uid)
+    return memes
+    
+def GetMemesByUid(uid):
+    if not uid: return []
+    memes = db.GqlQuery("SELECT * FROM Meme WHERE uid == :1 LIMIT :2", uid, MAX_LIST_SIZE)
+    return memes
+    
 class Meme(db.Model):
     image = db.StringProperty() # image blob key
     original_image = db.StringProperty(indexed=True) # image without captions
