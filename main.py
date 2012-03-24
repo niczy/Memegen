@@ -14,28 +14,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-from google.appengine.ext import webapp
-from google.appengine.ext.webapp import util
+import webapp2
 from controllers import images
 from controllers import api
+from controllers import page
+import jinja2
+import os
 
-
-class MainHandler(webapp.RequestHandler):
-    def get(self):
-        self.response.out.write('Hello world!')
-
-
-def main():
-    application = webapp.WSGIApplication([
-        ('/', MainHandler),
-        ('/api/meme', api.ApiMeme), # Get/Post a Meme.
-        ('/i/upload', images.UploadHandler),
-        ('/i/download/([^/]+)?', images.DownloadHandler),
-        ('/i/serve/([^/]+)?', images.ServeHandler),
-        ('/upload', images.UploadPageHandler)
-    ],debug=True)
-    util.run_wsgi_app(application)
-
-
-if __name__ == '__main__':
-    main()
+app = webapp2.WSGIApplication([
+    ('/', page.PageHandler),
+    ('/(.*)', page.PageHandler),
+    ('/api/meme', api.ApiMeme), # Get/Post a Meme.
+    ('/i/upload', images.UploadHandler),
+    ('/i/download/([^/]+)?', images.DownloadHandler),
+    ('/i/serve/([^/]+)?', images.ServeHandler),
+    ('/upload', images.UploadPageHandler)
+],debug=True)

@@ -4,7 +4,7 @@ Created on Mar 24, 2012
 @author: charliezhang
 '''
 
-from google.appengine.ext import webapp
+import webapp2
 
-class ApiMeme(webapp.RequestHandler):
+class ApiMeme(webapp2.RequestHandler):
     pass

@@ -6,11 +6,11 @@ Created on Mar 24, 2012
 
 import urllib
 from google.appengine.api import images
-from google.appengine.ext import webapp
+import webapp2
 from google.appengine.ext import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
 
-class UploadPageHandler(webapp.RequestHandler):
+class UploadPageHandler(webapp2.RequestHandler):
     def get(self):
         upload_url = blobstore.create_upload_url('/i/upload')
         self.response.out.write('<html><body>')
@@ -30,7 +30,7 @@ class DownloadHandler(blobstore_handlers.BlobstoreDownloadHandler):
         blob_info = blobstore.BlobInfo.get(resource)
         self.send_blob(blob_info)
 
-class ServeHandler(webapp.RequestHandler):
+class ServeHandler(webapp2.RequestHandler):
     def get(self, blob_key):
         if blob_key:
             blob_key = str(urllib.unquote(blob_key))
