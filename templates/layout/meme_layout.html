@@ -1,0 +1,13 @@
+{% extends "layout/base.html" %} 
+{% block content %}
+<div class="row-fluid">
+    <div class="span10">
+        {% block meme_content %}
+        {% endblock %}
+    </div>
+    <div class="span2">
+        {% block popular_meme %}
+        {% endblock %}
+    </div>
+</div>
+{% endblock %}

@@ -4,16 +4,19 @@
         <link href="/css/bootstrap.css" type="text/css" rel="stylesheet"/>
     </head>
     <body>
+        {% include "fragments/header.html" %}
         <div class="container-fluid">
-            <div class="row-fluid">
-                <div class="span2">
-                    {%include 'fragments/nav.html' %}
-                </div>
-                <div class="span10">
-                    {% block content %}
-                    {% endblock %}
-                </div>
+            <div class="row">
+                <div class="span12">&nbsp; </div>
             </div>
+            <div class="row">
+                <div class="span12">&nbsp; </div>
+            </div>
+            <div class="row">
+                <div class="span12">&nbsp; </div>
+            </div>
+            {% block content %}
+            {% endblock %}
             <div class="row-fluid">
                 <div class="pull-right">
                     {% include 'fragments/footer.html'%}
