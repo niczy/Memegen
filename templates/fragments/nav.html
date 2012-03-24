@@ -1,0 +1,20 @@
+<ul class="nav nav-list">
+    <li class="nav-header">
+        <h1>MEME</h1>
+    </li>
+    <li {% if page_name=="popular" %} class="active" {% endif %}>
+        <a href="/popular">Popular</a>
+    </li>
+
+    <li {% if page_name=="random" %} class="active" {% endif %}>
+        <a href="/random">Random</a>
+    </li>
+
+    <li {% if page_name=="favorites" %} class="active" {% endif %}>
+        <a href="/favorites">Favorites</a>
+    </li>
+
+    <li {% if page_name=="mine" %} class="active" {% endif %}>
+        <a href="/mine">Mine</a>
+    </li>
+</ul>
