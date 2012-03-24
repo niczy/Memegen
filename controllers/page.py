@@ -13,6 +13,6 @@ def render_page(handler, template_name, values = {}):
 
 class PageHandler(webapp2.RequestHandler):
     def get(self, page_name='index'):
-        render_page(self, page_name)
+        render_page(self,page_name, {'page_name': page_name.lower()})
 
 
