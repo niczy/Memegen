@@ -16,6 +16,8 @@
 #
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
+from controllers import images
+from controllers import api
 
 
 class MainHandler(webapp.RequestHandler):
@@ -24,8 +26,14 @@ class MainHandler(webapp.RequestHandler):
 
 
 def main():
-    application = webapp.WSGIApplication([('/', MainHandler)],
-                                         debug=True)
+    application = webapp.WSGIApplication([
+        ('/', MainHandler),
+        ('/api/meme', api.ApiMeme), # Get/Post a Meme.
+        ('/i/upload', images.UploadHandler),
+        ('/i/download/([^/]+)?', images.DownloadHandler),
+        ('/i/serve/([^/]+)?', images.ServeHandler),
+        ('/upload', images.UploadPageHandler)
+    ],debug=True)
     util.run_wsgi_app(application)
 
 
