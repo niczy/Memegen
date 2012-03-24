@@ -23,6 +23,7 @@ import os
 
 app = webapp2.WSGIApplication([
     ('/', page.PageHandler),
+    ('/(.*)/', page.PageHandler),
     ('/(.*)', page.PageHandler),
     ('/api/meme', api.ApiMeme), # Get/Post a Meme.
     ('/i/upload', images.UploadHandler),
