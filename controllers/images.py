@@ -9,6 +9,7 @@ from google.appengine.api import images
 import webapp2
 from google.appengine.ext import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
+from models import meme
 
 class UploadPageHandler(webapp2.RequestHandler):
     def get(self):
@@ -20,11 +21,9 @@ class UploadPageHandler(webapp2.RequestHandler):
         
 class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
-        #self.error(404)
-        self.response.out.write(self.request.body)
-        return #TODO
         upload_files = self.get_uploads('file')  # 'file' is file upload field in the form
         blob_info = upload_files[0]
+        meme.save_template(blob_info.key())
         self.redirect('/i/serve/%s' % blob_info.key())
 
 class DownloadHandler(blobstore_handlers.BlobstoreDownloadHandler):
@@ -41,10 +40,9 @@ class ServeHandler(webapp2.RequestHandler):
             
             if blob_info:
                 img = images.Image(blob_key=blob_key)
-                img.resize(width=80, height=100)
-                img.im_feeling_lucky()
+                img.im_feeling_lucky() #TODO
                 thumbnail = img.execute_transforms(output_encoding=images.JPEG)
-
+                
                 self.response.headers['Content-Type'] = 'image/jpeg'
                 self.response.out.write(thumbnail)
                 #self.response.out.write(images.get_serving_url(blob_key, 20))

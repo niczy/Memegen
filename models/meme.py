@@ -5,12 +5,12 @@ Created on Mar 24, 2012
 '''
 
 from google.appengine.ext import db
-from google.appengine.ext import webapp
 from google.appengine.api import images
 from google.appengine.api import files, urlfetch
 from google.appengine.ext import blobstore
 
 import datetime
+import json
 
 MAX_LIST_SIZE = 1000
 FETCH_TIMEOUT = 1000
@@ -23,7 +23,7 @@ def write_blobstore(img, content_type, source):
     files.finalize(file_name)
     blob_key = files.blobstore.get_blob_key(file_name)
     return blob_key
-    
+
 # Fetch the image from the given url and store in blobstore,
 # Return blob_key if success, empty string otherwise
 def fetch_image_to_blobstore(url):
@@ -65,18 +65,39 @@ def make_meme(blob_key, top_caption, bottom_caption, style):
     new_blob_key = generate_meme_image(blob_key, top_caption, bottom_caption, style)
     if not new_blob_key:
         return -1
+    template_info = get_template(blob_key)
+    if not template_info:
+        return -1
     meme = Meme(image = str(new_blob_key),
                 original_image = blob_key,
                 like = 0,
                 dislike = 0,
+                original_width = template_info.width,
+                original_height = template_info.height,
                 date = datetime.datetime.now(),
                 captions = [top_caption, bottom_caption])
     meme.put()
     return meme.key().id()
+
+# Get Template by blob_key
+def get_template(blob_key):
+    templates = db.Query(Template).filter("blob_key =", blob_key).fetch(1)
+    for template in templates: return template
     
-def get_images():
-    images = db.Query(Image).order("-like").fetch(MAX_LIST_SIZE)
-    return images
+def save_template(blob_key):
+    img = images.Image(blob_key=blob_key)
+    img.im_feeling_lucky()
+    img.execute_transforms(output_encoding=images.JPEG,quality=1)
+    tpl = Template(blob_key = str(blob_key),
+                   like = 0,
+                   date = datetime.datetime.now(),
+                   width = img.width,
+                   height = img.height)
+    tpl.put()
+    
+def get_popular_templates():
+    templates = db.Query(Template).order("-like").fetch(MAX_LIST_SIZE)
+    return templates
     
 class Meme(db.Model):
     image = db.StringProperty() # image blob key
@@ -89,16 +110,33 @@ class Meme(db.Model):
     like = db.IntegerProperty(indexed=True)
     dislike = db.IntegerProperty(indexed=True)
     captions = db.StringListProperty() # Store the texts for indexing
+    
+    def to_json_str(self):
+        return json.dumps(self.to_obj())
+    
+    def to_obj(self):
+        return {
+          "image": self.image,
+          "like": self.like,
+          "dislike": self.dislike,
+        }
 
-class Image(db.Model):
+class Template(db.Model):
     blob_key = db.StringProperty()
     width = db.IntegerProperty()
     height = db.IntegerProperty()
     uid = db.IntegerProperty(indexed=True) # User's id. automatically generated id.
-    date = db.DateProperty(indexed=True) # Publish date
+    date = db.DateTimeProperty(indexed=True) # Publish date
     like = db.IntegerProperty(indexed=True)
 
-
+    def to_json_str(self):
+        return json.dumps(self.to_obj())
+    
+    def to_obj(self):
+        return {
+          "blob_key": self.blob_key,
+          "like": self.like
+        }
 
 
 import httplib, mimetypes, mimetools, urllib2, cookielib, urllib2
