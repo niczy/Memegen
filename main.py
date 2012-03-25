@@ -25,7 +25,8 @@ app = webapp2.WSGIApplication([
     ('/', page.PageHandler),
     ('/meme/(.*)', page.MemeHandler),
     ('/api/meme/([^/]+)', api.ApiMeme), # Get/Post a Meme by ID.
-    ('/api/memelist/([^/]+)', api.ApiMemeList), # Get a list of MemeID by different criterias.
+    ('/api/memelist/([^/]+)', api.ApiMemeList), # Get a list of Meme by different criterias.
+    ('/api/templatelist/([^/]+)?', api.ApiTemplateList), # Get a list of Meme by different criterias.
     ('/i/upload', images.UploadHandler),
     ('/i/download/([^/]+)?', images.DownloadHandler),
     ('/i/serve/([^/]+)?', images.ServeHandler),

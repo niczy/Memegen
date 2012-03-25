@@ -31,6 +31,8 @@ class MakeMeme(PageHandler):
         style = self.request.get('style')
         fetch_url = self.request.get('fetch_url')
         if fetch_url:
-            self.response.out.write(meme.fetch_image_to_blobstore(fetch_url)) #TODO
+            blob_key = meme.fetch_image_to_blobstore(fetch_url)
+            meme.save_template(blob_key)
+            self.response.out.write(blob_key) #TODO
         else:
             self.response.out.write(meme.make_meme(blob_key, top_caption, bottom_caption, style)) #TODO
