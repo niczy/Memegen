@@ -4,12 +4,17 @@ Created on Mar 24, 2012
 @author: charliezhang
 '''
 
+import json
 import webapp2
 from models import meme
 
-def response_json(handler, json):
+# Map a list of Model to a list of objs
+def obj_list(model_list):
+    return map(lambda x: x.to_obj(), model_list)
+    
+def response_json(handler, obj):
     handler.response.headers['Content-Type'] = 'application/json'
-    handler.response.out.write(json)
+    handler.response.out.write(json.dumps(obj))
         
 class ApiMeme(webapp2.RequestHandler):
     def get(self, mid):
@@ -21,9 +26,18 @@ class ApiMemeList(webapp2.RequestHandler):
             self.error(404)
             return
         if type == 'popular':
-            response_json(self, '["1", "2", "3"]')
+            memes = obj_list(meme.get_popular_memes())
+            response_json(self, memes)
         if type == 'latest':
-            response_json(self, '["3", "2", "1"]')   
+            memes = obj_list(meme.get_latest_memes())
+            response_json(self, memes)   
         if type == 'byuser':
             uid = self.request.get("uid")
-            meme
+
+class ApiTemplateList(webapp2.RequestHandler):
+    def get(self, type):
+        if not type: type = 'popular'
+        if type == 'popular':
+            templates = obj_list(meme.get_popular_templates())
+            response_json(self, templates)
+        return
