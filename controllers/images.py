@@ -20,6 +20,9 @@ class UploadPageHandler(webapp2.RequestHandler):
         
 class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
+        #self.error(404)
+        self.response.out.write(self.request.body)
+        return #TODO
         upload_files = self.get_uploads('file')  # 'file' is file upload field in the form
         blob_info = upload_files[0]
         self.redirect('/i/serve/%s' % blob_info.key())
