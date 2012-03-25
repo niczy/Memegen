@@ -3,6 +3,8 @@ import logging
 import jinja2
 import os
 
+from models import meme
+
 jinja_enviroment = jinja2.Environment(
         loader=jinja2.FileSystemLoader("templates/")
         )
@@ -21,4 +23,14 @@ class MemeHandler(webapp2.RequestHandler):
         if meme_id:
             render_page(self, "single_meme", meme_id=meme_id)
 
-
+class MakeMeme(PageHandler):
+    def post(self):
+        blob_key = self.request.get('blob_key')
+        top_caption = self.request.get('top_caption')
+        bottom_caption = self.request.get('bottom_caption')
+        style = self.request.get('style')
+        fetch_url = self.request.get('fetch_url')
+        if fetch_url:
+            self.response.out.write(meme.fetch_image_to_blobstore(fetch_url)) #TODO
+        else:
+            self.response.out.write(meme.make_meme(blob_key, top_caption, bottom_caption, style)) #TODO
