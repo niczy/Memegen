@@ -1,0 +1,31 @@
+{% extends "layout/base.html" %}
+
+{% block content %} 
+{% if error %}
+<div class="error">{{ error_msg }}</div>
+{% endif %}
+<form action="/signup" autocomplete="off" method="post" class="form">
+  <div><span>User Name:</span></div>
+  <input name="username" type="text" check-url="/signup_check/username" err-msg="username_err_msg" value="{{ username }}"></input>
+  <dd id="username_err_msg" class="warning"></dd>
+  <br/>
+  <div><span>Email Address:</span></div>
+  <input name="email" type="text" check-url="/signup_check/email" err-msg="email_err_msg" value="{{ email }}"></input>
+  <dd id="email_err_msg" class="warning"></dd>
+  <br/>
+  <div><span>Password:</span></div>
+  <input name="password" id="password" type="password"></input>
+  <dd id="password_err_msg" class="warning"></dd>
+  <br/>
+  <div><span>Confirm Password:</span></div>
+  <input name="confirm" id="confirm" type="password" err-msg="confirm_err_msg"></input>
+  <dd id="confirm_err_msg" class="warning">Password Doesn't Match!</dd>
+  <br/>
+  <div><input type="submit" value="Sign Up!" id="signup_button"></div>
+</form>
+{% endblock %}
+
+
+{% block app_script %}SignupPageApp{% endblock %}
+
+{% block use_script %}SignupPageApp{% endblock %}

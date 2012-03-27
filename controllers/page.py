@@ -1,17 +1,7 @@
 import webapp2
-import logging
-import jinja2
-import os
 
+from controllers import render_page
 from models import meme
-
-jinja_enviroment = jinja2.Environment(
-        loader=jinja2.FileSystemLoader("templates/")
-        )
-
-def render_page(handler, template_name, **kargs):
-    template = jinja_enviroment.get_template(template_name + ".html")
-    handler.response.out.write(template.render(kargs))
 
 class PageHandler(webapp2.RequestHandler):
     def get(self, page_name='popular'):

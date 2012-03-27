@@ -1,0 +1,18 @@
+{% extends "layout/base.html" %}
+
+{% block content %} 
+{% if error %}
+<div class="error">{{ error_msg }}</div>
+{% endif %}
+<form action="/login" method="post">
+  <div><span>UserName or Email:<a href="/signup">(Sign Up)</a></span></div>
+  <input name="username"></input>
+  <br/>
+  
+  <div><span>Password: <a href="/resetpassword">(Forgot password)</a></span></div>
+  <input name="password" type="password"></input>
+  <br/>
+  
+  <div><input type="submit" value="Log in"></div>
+</form>
+{% endblock %}
