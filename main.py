@@ -15,9 +15,12 @@
 # limitations under the License.
 #
 import webapp2
-from controllers import images
+from controllers import account
 from controllers import api
+from controllers import images
+from controllers import login
 from controllers import page
+from controllers import signup
 import jinja2
 import os
 
@@ -31,6 +34,12 @@ app = webapp2.WSGIApplication([
     ('/i/download/([^/]+)?', images.DownloadHandler),
     ('/i/serve/([^/]+)?', images.ServeHandler),
     ('/makememe', page.MakeMeme),
-    ('/upload', images.UploadPageHandler),
+    ('/upload', images.UploadPageHandler),  
+    (r'/resetpassword', account.ResetPassword),
+    (r'/setnewpassword/(.*)', account.SetNewPassword),             
+    (r'/signup_check/(.*)', signup.SignUpCheck),
+    (r'/signup', signup.SignUp),
+    (r'/login', login.Login),
+    (r'/logout', login.Logout),
     ('/([^/]+)', page.PageHandler)
 ],debug=True)
