@@ -4,18 +4,15 @@ Created on Mar 24, 2012
 @author: charliezhang
 '''
 
-import json
+
 import webapp2
+from controllers import response_json
 from models import meme
 
 # Map a list of Model to a list of objs
 def obj_list(model_list):
     return map(lambda x: x.to_obj(), model_list)
     
-def response_json(handler, obj):
-    handler.response.headers['Content-Type'] = 'application/json'
-    handler.response.out.write(json.dumps(obj))
-        
 class ApiMeme(webapp2.RequestHandler):
     def get(self, mid):
         self.response.out.write("Get Meme: %s" % mid)

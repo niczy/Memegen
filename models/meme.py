@@ -48,16 +48,27 @@ def get_memes_by_uid(uid):
     if not uid: return []
     memes = db.Query(Meme).filter("uid =", uid).order("-date").fetch(MAX_LIST_SIZE)
     return memes
-    
+
+def draw_text(top_cation, bottom_caption):
+    # Create the image
+    text_img = bmp.BitMap(300,400,bmp.Color.WHITE)
+    # bmpfont_Tw_Cen_MT_30 is a generated file using PyBMP's tool
+    text_img.setFont(bmpfont_arial_12.font_data)
+    text_img.setPenColor( bmp.Color.BLUE )
+    text_img.drawText(top_cation + bottom_caption, 13, 13)
+    return text_img.getBitmap() #TODO  no compress..
+  
 def generate_meme_image(blob_key, top_caption, bottom_caption, style):
     blob_info = blobstore.get(blob_key) # this is the original image
     if blob_info:
         img = images.Image(blob_key=blob_key)
         img.rotate(90)
         img.im_feeling_lucky()
-        generated_image = img.execute_transforms(output_encoding=images.JPEG) #TODO(do complex transforms here)
+        img_text = draw_text(top_caption, bottom_caption)
+        #img_text.im_feeling_lucky() #TODO
+        #generated_image = img_text.execute_transforms(output_encoding=images.BMP) #TODO(do complex transforms here)
         #url = blobstore.create_upload_url('/i/uploadbyserver')#TODO
-        return write_blobstore(generated_image, 'image/jpeg', 'generate_by_server')
+        return write_blobstore(img_text, 'image/bmp', 'generate_by_server')
     return ''
     
 # Build a Meme and put in datastore, return numeric ID if success, -1 if failed
@@ -110,6 +121,7 @@ class Meme(db.Model):
     like = db.IntegerProperty(indexed=True)
     dislike = db.IntegerProperty(indexed=True)
     captions = db.StringListProperty() # Store the texts for indexing
+    description = db.StringProperty()
     
     def to_json_str(self):
         return json.dumps(self.to_obj())
@@ -119,6 +131,8 @@ class Meme(db.Model):
           "image": self.image,
           "like": self.like,
           "dislike": self.dislike,
+          "description": self.description,
+          "date": str(self.date)
         }
 
 class Template(db.Model):
@@ -135,7 +149,8 @@ class Template(db.Model):
     def to_obj(self):
         return {
           "blob_key": self.blob_key,
-          "like": self.like
+          "like": self.like,
+          "date": self.date
         }
 
 
