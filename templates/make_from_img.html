@@ -1,0 +1,7 @@
+{% extends "layout/make_layout.html" %}
+{% block inner_content%}
+        <form class="well form-inline" enctype="multipart/form-data" method="post" action="{{ post_url}}">
+                <input type="file" class="input-file" id="url">
+            <input type="submit" class="btn btn-primary" value="Submit">
+        </form>
+{% endblock %}
