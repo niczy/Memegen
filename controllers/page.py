@@ -1,12 +1,40 @@
 import webapp2
 
+from google.appengine.ext import blobstore
 from controllers import render_page
 from models import meme
+import logging
+
+
+class MakeHandler(webapp2.RequestHandler):
+
+    def get(self, source='template'):
+        if source == 'template':
+            render_page(self,'make_from_template', source=source)
+        elif source == 'url':
+            render_page(self, 'make_from_url', source=source)
+        elif source == 'img':
+            post_url = blobstore.create_upload_url('/i/upload')
+            logging.info("got post url is " + post_url)
+            render_page(self, 'make_from_img', source=source, post_url=post_url)
+
+
 
 class PageHandler(webapp2.RequestHandler):
     def get(self, page_name='popular'):
         lower_name = page_name.lower()
         render_page(self,lower_name, page_name=lower_name)
+
+class MakeMemeHandler(webapp2.RequestHandler):
+
+    def get(self, template_id = None):
+        url = self.request.get('url')
+        if url:
+            #fetch the url then redirect to /makememe/tempalteid
+            logging.info("got url is " + url)
+            self.redirect('/makememe/templateid')
+            return
+        render_page(self, 'make_meme', template_id=template_id)
 
 class MemeHandler(webapp2.RequestHandler):
     def get(self, meme_id):

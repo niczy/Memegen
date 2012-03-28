@@ -24,7 +24,8 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
         upload_files = self.get_uploads('file')  # 'file' is file upload field in the form
         blob_info = upload_files[0]
         meme.save_template(blob_info.key())
-        self.redirect('/i/serve/%s' % blob_info.key())
+        self.redirect('/makememe/%s' % blob_info.key())
+        '''self.redirect('/i/serve/%s' % blob_info.key())'''
 
 class DownloadHandler(blobstore_handlers.BlobstoreDownloadHandler):
     def get(self, resource):

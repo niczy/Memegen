@@ -26,6 +26,10 @@ import os
 
 app = webapp2.WSGIApplication([
     ('/', page.PageHandler),
+    (r'/makememe', page.MakeMemeHandler),
+    (r'/makememe/(.*)', page.MakeMemeHandler),
+    (r'/make', page.MakeHandler),
+    (r'/make/(.*)', page.MakeHandler),
     ('/meme/(.*)', page.MemeHandler),
     ('/api/meme/([^/]+)', api.ApiMeme), # Get/Post a Meme by ID.
     ('/api/memelist/([^/]+)', api.ApiMemeList), # Get a list of Meme by different criterias.

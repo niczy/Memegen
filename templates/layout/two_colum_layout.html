@@ -1,0 +1,13 @@
+{% extends "layout/base.html" %} 
+{% block content %}
+<div class="row-fluid">
+    <div class="span2">
+        {% block left_colum%}
+        {% endblock %}
+    </div>
+    <div class="span10">
+        {% block right_colum%}
+        {% endblock %}
+    </div>
+</div>
+{% endblock %}
