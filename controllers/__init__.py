@@ -20,14 +20,14 @@ def render_page(handler, template_name, **kargs):
 def require_login(url):
     def login_check(fn):
         def Get(self, *args):
-            self.username = self.request.cookies.get('username')
-            if self.username:
+            self.uid = int(self.request.cookies.get('uid'))
+            if self.uid:
                 key = self.request.cookies.get('key')
-                expected_key = user.get_user_cookie_key(self.username)
+                expected_key = user.get_user_cookie_key(self.uid)
                 if key != expected_key:
-                    self.username = None
+                    self.uid = None
                     
-            if self.username == None and url != None:
+            if self.uid == None and url != None:
                 self.redirect(url)
                 return
             else:
