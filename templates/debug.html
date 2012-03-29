@@ -1,0 +1,8 @@
+{% extends "layout/base.html" %}
+{% block content%}
+
+Hi, This is the page for debug.
+<form action="/api/comments/70" method="POST" enctype="multipart/form-data">
+Content <input type="text" name="content"><br/>
+<input type="submit" name="submit" value="Post Comment on Meme"> </form>
+{% endblock %}

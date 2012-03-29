@@ -99,15 +99,16 @@ def register_user(username, email, password, confirm):
 
 def get_user_cookie_key(uoe):
     hashed = hashlib.md5()
-    hashed.update(USER_COOKIE_HASH_KEY + uoe)
+    hashed.update(USER_COOKIE_HASH_KEY + str(uoe))
     return hashed.hexdigest()
     
 def login_with_username_or_email(handler, uoe, password):
     hashed_password = hash_password(password)
     user = get_user_by_username_or_email(uoe)
     if user and user.password == hashed_password:
-        cookie_key = get_user_cookie_key(user.username)
-        handler.response.headers.add_header('Set-Cookie','username=' + str(user.username) + '; expires=Sun, 31-May-2999 23:59:59 GMT; path=/;')
+        uid = user.key().id()
+        cookie_key = get_user_cookie_key(uid)
+        handler.response.headers.add_header('Set-Cookie','uid=' + str(uid) + '; expires=Sun, 31-May-2999 23:59:59 GMT; path=/;')
         handler.response.headers.add_header('Set-Cookie','key=' + cookie_key + '; expires=Sun, 31-May-2999 23:59:59 GMT; path=/;')
         return None #Success!
     return 'Username/email Don''t exist or password is wrong!' #Failed!

@@ -31,6 +31,7 @@ app = webapp2.WSGIApplication([
     (r'/make', page.MakeHandler),
     (r'/make/(.*)', page.MakeHandler),
     ('/meme/(.*)', page.MemeHandler),
+    ('/api/comments/([^/]+)', api.ApiComments), # Get a list of comments OR Post a comment, given the mid.
     ('/api/meme/([^/]+)', api.ApiMeme), # Get/Post a Meme by ID.
     ('/api/memelist/([^/]+)', api.ApiMemeList), # Get a list of Meme by different criterias.
     ('/api/templatelist/([^/]+)?', api.ApiTemplateList), # Get a list of Meme by different criterias.
@@ -45,5 +46,6 @@ app = webapp2.WSGIApplication([
     (r'/signup', signup.SignUp),
     (r'/login', login.Login),
     (r'/logout', login.Logout),
+    (r'/debug', page.Debug),
     ('/([^/]+)', page.PageHandler)
 ],debug=True)

@@ -54,3 +54,7 @@ class MakeMeme(PageHandler):
             self.response.out.write(blob_key) #TODO
         else:
             self.response.out.write(meme.make_meme(blob_key, top_caption, bottom_caption, style)) #TODO
+            
+class Debug(PageHandler):
+    def get(self):
+        render_page(self, "debug")
