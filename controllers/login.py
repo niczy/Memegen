@@ -24,5 +24,5 @@ class Login(webapp2.RequestHandler):
 
 class Logout(webapp2.RequestHandler):
     def get(self):
-        self.response.headers.add_header('Set-Cookie','username=''; expires=Sun, 31-May-1999 23:59:59 GMT; path=/;')
+        self.response.headers.add_header('Set-Cookie','uid=''; expires=Sun, 31-May-1999 23:59:59 GMT; path=/;')
         self.redirect('/')

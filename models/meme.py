@@ -12,8 +12,7 @@ from google.appengine.ext import blobstore
 import datetime
 import json
 
-MAX_LIST_SIZE = 1000
-FETCH_TIMEOUT = 1000
+from models import MAX_LIST_SIZE
 
 #Write image file to blobstore, return blob_key
 def write_blobstore(img, content_type, source):
@@ -80,7 +79,7 @@ def make_meme(blob_key, top_caption, bottom_caption, style):
     if not template_info:
         return -1
     meme = Meme(image = str(new_blob_key),
-                original_image = blob_key,
+                template = blob_key,
                 like = 0,
                 dislike = 0,
                 original_width = template_info.width,
@@ -112,11 +111,11 @@ def get_popular_templates():
     
 class Meme(db.Model):
     image = db.StringProperty() # image blob key
-    original_image = db.StringProperty(indexed=True) # image without captions
+    template= db.StringProperty(indexed=True) # image without captions
     # The Original size of image. Browser client can request thumbnail with any size smaller than this and layout images dynamically.
     original_width = db.IntegerProperty()
     original_height = db.IntegerProperty()
-    uid = db.IntegerProperty(indexed=True) # User's id. automatically generated id.
+    user = db.IntegerProperty(indexed=True) # User's id. automatically generated id.
     date = db.DateTimeProperty(indexed=True) # Publish date
     like = db.IntegerProperty(indexed=True)
     dislike = db.IntegerProperty(indexed=True)
@@ -128,6 +127,7 @@ class Meme(db.Model):
     
     def to_obj(self):
         return {
+          "mid": self.key().id(),
           "image": self.image,
           "like": self.like,
           "dislike": self.dislike,
