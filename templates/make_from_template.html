@@ -1,36 +1,6 @@
 {% extends "layout/make_layout.html" %}
 {% block inner_content%}
-    <div class="row">
-        <div class="span12">
-
-        <ul class="thumbnails">
-
-            <li class="span3" >
-                <a class="thumbnail" href="/makememe/templateid">
-                    <img src="http://placehold.it/400x400" alt="*"/>
-                </a>
-
-            </li>
-            <li class="span3" >
-                <a class="thumbnail" href="/makememe/templateid">
-                    <img src="http://placehold.it/400x400" alt="*"/>
-                </a>
-
-            </li>
-            <li class="span3">
-                <a class="thumbnail" href="/makememe/templateid">
-                    <img src="http://placehold.it/400x400" alt="*"/>
-                </a>
-
-            </li>
-            <li class="span3">
-                <a class="thumbnail" href="/makememe/templateid">
-                    <img src="http://placehold.it/400x400" alt="*"/>
-                </a>
-
-            </li>
-
-        </ul>
-        </div>
-    </div>
+    {% include "fragments/gallery.html"%}
 {% endblock %}
+
+{% block appjs %}MakeFromTemplateApp.js{% endblock %}

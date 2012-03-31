@@ -32,7 +32,9 @@ class MakeMemeHandler(webapp2.RequestHandler):
         if url:
             #fetch the url then redirect to /makememe/tempalteid
             logging.info("got url is " + url)
-            self.redirect('/makememe/templateid')
+            blob_key = meme.fetch_image_to_blobstore(url)
+            meme.save_template(blob_key)
+            self.redirect('/makememe/%s' % blob_key)
             return
         render_page(self, 'make_meme', template_id=template_id)
 
