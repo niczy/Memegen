@@ -5,6 +5,9 @@ api_version: 1
 threadsafe: true
 
 handlers:
+- url: /test.*
+  script: gaeunit.app
+  
 - url: /css
   static_dir: static/css
 
@@ -20,7 +23,7 @@ handlers:
 - url: /favicon\.ico
   static_files: favicon.ico
   upload: favicon\.ico
-
+  
 - url: .*
   script: main.app
 

@@ -2,6 +2,7 @@ import webapp2
 
 from google.appengine.ext import blobstore
 from controllers import render_page
+from controllers import redirect
 from models import meme
 import logging
 
@@ -34,7 +35,7 @@ class MakeMemeHandler(webapp2.RequestHandler):
             logging.info("got url is " + url)
             blob_key = meme.fetch_image_to_blobstore(url)
             meme.save_template(blob_key)
-            self.redirect('/makememe/%s' % blob_key)
+            redirect(self, '/makememe/%s' % blob_key)
             return
         render_page(self, 'make_meme', template_id=template_id)
 
@@ -57,6 +58,15 @@ class MakeMeme(PageHandler):
         else:
             self.response.out.write(meme.make_meme(blob_key, top_caption, bottom_caption, style)) #TODO
             
+#DEBUG MODE ONLY
 class Debug(PageHandler):
     def get(self):
         render_page(self, "debug")
+
+#DEBUG MODE ONLY
+class RunTest(PageHandler):
+    def get(self):
+        import unittest
+        unittest.main()
+        
+
