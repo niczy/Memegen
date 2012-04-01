@@ -33,7 +33,7 @@ def fetch_image_to_blobstore(url):
         return write_blobstore(file_data, content_type, 'url_fetch')
     except urllib2.URLError, e:
         print e
-        return ''
+        return None
     
 def get_latest_memes():
     memes = db.Query(Meme).order("-date").fetch(MAX_LIST_SIZE)
@@ -67,16 +67,16 @@ def generate_meme_image(blob_key, top_caption, bottom_caption, style):
         #img_text.im_feeling_lucky() #TODO
         #generated_image = img_text.execute_transforms(output_encoding=images.BMP) #TODO(do complex transforms here)
         #url = blobstore.create_upload_url('/i/uploadbyserver')#TODO
-        return write_blobstore(img_text, 'image/bmp', 'generate_by_server')
-    return ''
+        return write_blobstore(img, 'image/bmp', 'generate_by_server')
+    return None
     
 # Build a Meme and put in datastore, return numeric ID if success, -1 if failed
 def make_meme(blob_key, top_caption, bottom_caption, style):
-    new_blob_key = generate_meme_image(blob_key, top_caption, bottom_caption, style)
-    if not new_blob_key:
-        return -1
     template_info = get_template(blob_key)
     if not template_info:
+        return -1
+    new_blob_key = generate_meme_image(blob_key, top_caption, bottom_caption, style)
+    if not new_blob_key:
         return -1
     meme = Meme(image = str(new_blob_key),
                 template = blob_key,
@@ -93,6 +93,7 @@ def make_meme(blob_key, top_caption, bottom_caption, style):
 def get_template(blob_key):
     templates = db.Query(Template).filter("blob_key =", blob_key).fetch(1)
     for template in templates: return template
+    return None
     
 def save_template(blob_key):
     img = images.Image(blob_key=blob_key)
@@ -157,20 +158,7 @@ class Template(db.Model):
 import httplib, mimetypes, mimetools, urllib2, cookielib, urllib2
 #post img to a blobstore url, return the blob_key, empty if failed
 def DEPRECATED_post_image_to_blobstore(img, url, source, content_type='image/jpeg'):
-    try:
-        #fetch_response = urlfetch.fetch(url)
-        file_data = img
-        content_type = 'image/jpeg'
-        file_name = files.blobstore.create(mime_type=content_type)
-        with files.open(file_name, 'a') as f:
-            f.write(file_data)
-        files.finalize(file_name)
-        blob_key = files.blobstore.get_blob_key(file_name)
-        return blob_key
-    except urllib2.URLError, e:
-        print e
-        return ''
-    
+
     def post_multipart(host, selector, fields, files):
         """
         Post fields and files to an http host as multipart/form-data.

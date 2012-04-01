@@ -4,6 +4,7 @@ import logging
 import jinja2
 import os
 import json
+import config
 
 jinja_enviroment = jinja2.Environment(
         loader=jinja2.FileSystemLoader("templates/")
@@ -16,6 +17,9 @@ def response_json(handler, obj, type='application/json'):
 def render_page(handler, template_name, **kargs):
     template = jinja_enviroment.get_template(template_name + ".html")
     handler.response.out.write(template.render(kargs))
+
+def redirect(handler, url, *args):
+    handler.redirect(config.HOST + url, *args)
     
 def require_login(url):
     def login_check(fn):

@@ -25,11 +25,10 @@
         </div>
         <script type="text/javascript" src="/vendors/sea.js"></script>
         <script type="text/javascript" src="/vendors/underscore.js"></script>
-        <script type="text/javascript" src="/vendors/backbone.js"></script>
         <script type="text/javascript" src="/vendors/jquery.js"></script>
+        <script type="text/javascript" src="/vendors/backbone.js"></script>
         <script type="text/javascript">
-            seajs.config({'base': "http://wonde.com/js/apps/"});
-            seajs.use("{% block appjs %}{% endblock %}");
+            seajs.use("/js/apps/{% block appjs %}{% endblock %}");
         </script>
     </body>
 </html>
