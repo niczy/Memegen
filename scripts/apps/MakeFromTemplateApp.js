@@ -4,7 +4,7 @@ define(function(require, exports) {
 		initialize: function() {
 			console.log(Backbone);
             var GalleryView = require('../views/GalleryView.js');
-            var galleryView = new GalleryView();
+            var galleryView = new GalleryView({el:'#gallery'});
             galleryView.render();
 		}
 	});

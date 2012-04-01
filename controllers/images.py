@@ -5,10 +5,12 @@ Created on Mar 24, 2012
 '''
 
 import urllib
-from google.appengine.api import images
 import webapp2
+from google.appengine.api import images
 from google.appengine.ext import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
+
+from controllers import redirect
 from models import meme
 
 class UploadPageHandler(webapp2.RequestHandler):
@@ -24,7 +26,7 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
         upload_files = self.get_uploads('file')  # 'file' is file upload field in the form
         blob_info = upload_files[0]
         meme.save_template(blob_info.key())
-        self.redirect('/makememe/%s' % blob_info.key())
+        redirect(self, '/makememe/%s' % blob_info.key())
         '''self.redirect('/i/serve/%s' % blob_info.key())'''
 
 class DownloadHandler(blobstore_handlers.BlobstoreDownloadHandler):

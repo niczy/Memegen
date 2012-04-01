@@ -23,8 +23,9 @@ from controllers import page
 from controllers import signup
 import jinja2
 import os
+import config
 
-app = webapp2.WSGIApplication([
+URL_MAP = [
     ('/', page.PageHandler),
     (r'/makememe', page.MakeMemeHandler),
     (r'/makememe/(.*)', page.MakeMemeHandler),
@@ -45,7 +46,15 @@ app = webapp2.WSGIApplication([
     (r'/signup_check/(.*)', signup.SignUpCheck),
     (r'/signup', signup.SignUp),
     (r'/login', login.Login),
-    (r'/logout', login.Logout),
+    (r'/logout', login.Logout)
+]
+URL_MAP_DEBUG = [
     (r'/debug', page.Debug),
     ('/([^/]+)', page.PageHandler)
-],debug=True)
+]
+
+if config.DEBUG:
+    for i in URL_MAP_DEBUG:
+        URL_MAP.append(i)
+
+app = webapp2.WSGIApplication(URL_MAP, debug=config.DEBUG)
