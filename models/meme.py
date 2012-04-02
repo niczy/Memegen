@@ -14,6 +14,26 @@ import json
 
 from models import MAX_LIST_SIZE
 
+def add_like_count(mid, cnt=1):
+    #TODO: Add cache here.
+    m = get_meme_by_id(mid)
+    if not m: return 'Meme not found! mid=' + str(mid)
+    m.like = m.like + 1
+    m.put()
+    tpl_key = m.template
+    tpls = db.Query(Template).filter("blob_key =", tpl_key)
+    for tpl in tpls:
+        tpl.like = tpl.like + 1
+        tpl.put()
+    return None
+
+#return -1 if meme not found
+def get_like_count(mid):
+    #TODO: Add cache here.
+    m = get_meme_by_id(mid)
+    if not m: return -1
+    return m.like
+    
 #Write image file to blobstore, return blob_key
 def write_blobstore(img, content_type, source):
     file_name = files.blobstore.create(content_type, source)
@@ -36,11 +56,11 @@ def fetch_image_to_blobstore(url):
         return None
     
 def get_latest_memes():
-    memes = db.Query(Meme).order("-date").fetch(MAX_LIST_SIZE)
+    memes = db.Query(Meme).filter("is_public =", True).order("-date").fetch(MAX_LIST_SIZE)
     return memes
 
 def get_popular_memes():
-    memes = db.Query(Meme).order("-like").fetch(MAX_LIST_SIZE)
+    memes = db.Query(Meme).filter("is_public =", True).order("-like").fetch(MAX_LIST_SIZE)
     return memes
     
 def get_memes_by_uid(uid):
@@ -48,6 +68,9 @@ def get_memes_by_uid(uid):
     memes = db.Query(Meme).filter("uid =", uid).order("-date").fetch(MAX_LIST_SIZE)
     return memes
 
+def get_meme_by_id(mid):
+    return Meme.get_by_id(mid)
+    
 def draw_text(top_cation, bottom_caption):
     # Create the image
     text_img = bmp.BitMap(300,400,bmp.Color.WHITE)
@@ -63,11 +86,12 @@ def generate_meme_image(blob_key, top_caption, bottom_caption, style):
         img = images.Image(blob_key=blob_key)
         img.rotate(90)
         img.im_feeling_lucky()
-        img_text = draw_text(top_caption, bottom_caption)
+        #img_text = draw_text(top_caption, bottom_caption)
         #img_text.im_feeling_lucky() #TODO
         #generated_image = img_text.execute_transforms(output_encoding=images.BMP) #TODO(do complex transforms here)
         #url = blobstore.create_upload_url('/i/uploadbyserver')#TODO
-        return write_blobstore(img, 'image/bmp', 'generate_by_server')
+        img = img.execute_transforms(images.JPEG)
+        return write_blobstore(img, 'image/jpeg', 'generate_by_server')
     return None
     
 # Build a Meme and put in datastore, return numeric ID if success, -1 if failed
@@ -112,7 +136,7 @@ def get_popular_templates():
     
 class Meme(db.Model):
     image = db.StringProperty() # image blob key
-    template= db.StringProperty(indexed=True) # image without captions
+    template = db.StringProperty(indexed=True) # image without captions
     # The Original size of image. Browser client can request thumbnail with any size smaller than this and layout images dynamically.
     original_width = db.IntegerProperty()
     original_height = db.IntegerProperty()
@@ -122,6 +146,7 @@ class Meme(db.Model):
     dislike = db.IntegerProperty(indexed=True)
     captions = db.StringListProperty() # Store the texts for indexing
     description = db.StringProperty()
+    is_public = db.BooleanProperty(default=True)
     
     def to_json_str(self):
         return json.dumps(self.to_obj())
@@ -137,7 +162,7 @@ class Meme(db.Model):
         }
 
 class Template(db.Model):
-    blob_key = db.StringProperty()
+    blob_key = db.StringProperty(indexed=True)
     width = db.IntegerProperty()
     height = db.IntegerProperty()
     uid = db.IntegerProperty(indexed=True) # User's id. automatically generated id.

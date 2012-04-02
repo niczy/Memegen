@@ -26,31 +26,33 @@ import os
 import config
 
 URL_MAP = [
-    ('/', page.PageHandler),
-    (r'/makememe', page.MakeMemeHandler),
-    (r'/makememe/(.*)', page.MakeMemeHandler),
+    (r'/', page.PageHandler),
+    (r'/api/addtofavorites/([^/]+)?', api.ApiAddToFavorites), #User add a Meme to his Favorites
+    (r'/api/comments/([^/]+)', api.ApiComments), # Get a list of comments OR Post a comment, given the mid.
+    (r'/api/getfavorites', api.ApiGetFavorites), #Return lists of user's favorite memes by different category
+    (r'/api/like/([^/]+)?', api.ApiLike),
+    (r'/api/meme/([^/]+)', api.ApiMeme), # Get/Post a Meme by ID.
+    (r'/api/memelist/([^/]+)', api.ApiMemeList), # Get a list of Meme by different criterias.
+    (r'/api/templatelist/([^/]+)?', api.ApiTemplateList), # Get a list of Meme by different criterias.
+    (r'/i/upload', images.UploadHandler),
+    (r'/i/download/([^/]+)?', images.DownloadHandler),
+    (r'/i/serve/([^/]+)?', images.ServeHandler),
+    (r'/login', login.Login),
+    (r'/logout', login.Logout),
     (r'/make', page.MakeHandler),
     (r'/make/(.*)', page.MakeHandler),
-    ('/meme/(.*)', page.MemeHandler),
-    ('/api/comments/([^/]+)', api.ApiComments), # Get a list of comments OR Post a comment, given the mid.
-    ('/api/meme/([^/]+)', api.ApiMeme), # Get/Post a Meme by ID.
-    ('/api/memelist/([^/]+)', api.ApiMemeList), # Get a list of Meme by different criterias.
-    ('/api/templatelist/([^/]+)?', api.ApiTemplateList), # Get a list of Meme by different criterias.
-    ('/i/upload', images.UploadHandler),
-    ('/i/download/([^/]+)?', images.DownloadHandler),
-    ('/i/serve/([^/]+)?', images.ServeHandler),
-    ('/makememe', page.MakeMeme),
-    ('/upload', images.UploadPageHandler),  
+    (r'/makememe', page.MakeMemeHandler),
+    (r'/makememe/(.*)', page.MakeMemeHandler),
+    (r'/meme/(.*)', page.MemeHandler),   
     (r'/resetpassword', account.ResetPassword),
     (r'/setnewpassword/(.*)', account.SetNewPassword),             
     (r'/signup_check/(.*)', signup.SignUpCheck),
     (r'/signup', signup.SignUp),
-    (r'/login', login.Login),
-    (r'/logout', login.Logout)
+    (r'/upload', images.UploadPageHandler)   
 ]
 URL_MAP_DEBUG = [
     (r'/debug', page.Debug),
-    ('/([^/]+)', page.PageHandler)
+    (r'/([^/]+)', page.PageHandler)
 ]
 
 if config.DEBUG:

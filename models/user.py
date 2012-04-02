@@ -108,7 +108,7 @@ def login_with_username_or_email(handler, uoe, password):
     if user and user.password == hashed_password:
         uid = user.key().id()
         cookie_key = get_user_cookie_key(uid)
-        handler.response.headers.add_header('Set-Cookie','uid=' + str(uid) + '; expires=Sun, 31-May-2999 23:59:59 GMT; path=/;')
+        handler.response.headers.add_header('Set-Cookie','username=' + user.username + '; uid=' + str(uid) + '; expires=Sun, 31-May-2999 23:59:59 GMT; path=/;')
         handler.response.headers.add_header('Set-Cookie','key=' + cookie_key + '; expires=Sun, 31-May-2999 23:59:59 GMT; path=/;')
         return None #Success!
     return 'Username/email Don''t exist or password is wrong!' #Failed!
