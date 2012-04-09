@@ -19,7 +19,7 @@ def render_page(handler, template_name, **kargs):
     handler.response.out.write(template.render(kargs))
 
 def redirect(handler, url, *args):
-    handler.redirect(config.HOST + url, *args)
+    handler.redirect(str(config.HOST + url), *args)
     
 def require_login(url):
     def login_check(fn):
