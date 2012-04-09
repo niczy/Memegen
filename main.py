@@ -30,6 +30,8 @@ URL_MAP = [
     (r'/api/addtofavorites/([^/]+)?', api.ApiAddToFavorites), #User add a Meme to his Favorites
     (r'/api/comments/([^/]+)', api.ApiComments), # Get a list of comments OR Post a comment, given the mid.
     (r'/api/getfavorites', api.ApiGetFavorites), #Return lists of user's favorite memes by different category
+    (r'/api/getmessages', api.ApiGetMessages), #Return a list of user's unread messages
+    (r'/api/setmessages', api.ApiSetMessages), #Set a list of user's messages.
     (r'/api/like/([^/]+)?', api.ApiLike),
     (r'/api/meme/([^/]+)', api.ApiMeme), # Get/Post a Meme by ID.
     (r'/api/memelist/([^/]+)', api.ApiMemeList), # Get a list of Meme by different criterias.

@@ -12,7 +12,7 @@ from models import comment
 from models import meme
 from models import likes
 from models import favorites
-
+from models import messages
 
 # Map a list of Model to a list of objs
 def obj_list(model_list):
@@ -79,11 +79,22 @@ class ApiAddToFavorites(webapp2.RequestHandler):
         else: res = favorites.add_user_favorite(self.uid, mid)
         response_json(self, res)
 
+class ApiGetMessages(webapp2.RequestHandler):
+    @require_login('/')
+    def get(self):
+        response_json(self, obj_list(messages.get_user_messages(self.uid)))
+
+class ApiSetMessages(webapp2.RequestHandler):
+    @require_login('/')
+    def get(self):
+        messages.set_user_message_read(self.uid)
+
 class ApiGetFavorites(webapp2.RequestHandler):
     @require_login('/')
     def get(self):
         response_json(self, obj_list(favorites.get_favorites(self.uid)))
-        
+
+       
     '''
 MAX_LIKE_IN_CACHE = 10
 like_cache = {(0, 'mid'): 0}
