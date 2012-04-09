@@ -5,10 +5,7 @@ Created on Mar 31, 2012
 '''
 
 import unittest
-from google.appengine.ext import db
-from google.appengine.api import urlfetch
 from tests import init_test
-import httplib, urllib
 
 class DatastoreApiTests(unittest.TestCase):
     def setUp(self):

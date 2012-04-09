@@ -7,6 +7,7 @@ Created on Mar 28, 2012
 from models import MAX_LIST_SIZE
 from google.appengine.ext import db
 from models import meme
+from models import messages
 import datetime
 import json
 import logging
@@ -24,9 +25,11 @@ def post_comment(uid, mid, content):
                       content = content,
                       date = datetime.datetime.now())
     comment.put()
+    messages.add_comment_message(m.user, mid)
     logging.info('User #%s Comments on Meme #%s: %s' % (uid, mid, content))
     return 'success'
 
+#TTODO: set mid as parent
 class Comment(db.Model):
     '''
     classdocs
