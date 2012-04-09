@@ -16,7 +16,7 @@ from tests import init_test
 def get_id_list(list, field):
     return map(lambda x: x[field], api.obj_list(list))
 
-def mock_make_meme(blob_key, top_caption, bottom_caption, style, like=0, dislike=0):
+def mock_make_meme(blob_key, top_caption, bottom_caption, style, like=0, dislike=0, uid=1):
     new_blob_key = blob_key + 'MEME'
     m = meme.Meme(image = str(new_blob_key),
                 template = blob_key,
@@ -25,6 +25,7 @@ def mock_make_meme(blob_key, top_caption, bottom_caption, style, like=0, dislike
                 original_width = 33,
                 original_height = 44,
                 date = datetime.datetime.now(),
+                user = uid,
                 captions = [top_caption, bottom_caption])
     m.put()
     return m.key().id()
@@ -50,7 +51,7 @@ class MemeTests(unittest.TestCase):
         self.assertEqual(len(memes), 1, "Model Meme Error! results:" + str(memes))
     
     def test_make_meme(self):
-        res = meme.make_meme("TEMPLATE", "hello", "btn", "BIG")
+        res = meme.make_meme("TEMPLATE", "hello", "btn", "BIG", 1)
         self.assertEqual(res, -1, "Template doesn't exist, make_meme() should fail!")
         
         '''

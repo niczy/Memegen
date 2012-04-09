@@ -3,6 +3,7 @@ import webapp2
 from google.appengine.ext import blobstore
 from controllers import render_page
 from controllers import redirect
+from controllers import require_login
 from models import meme
 import logging
 
@@ -27,6 +28,7 @@ class PageHandler(webapp2.RequestHandler):
         render_page(self,lower_name, page_name=lower_name)
 
 class MakeMemeHandler(webapp2.RequestHandler):
+    @require_login('/')
     def post(self):
         blob_key = self.request.get('blob_key')
         top_caption = self.request.get('top_caption')
@@ -38,7 +40,7 @@ class MakeMemeHandler(webapp2.RequestHandler):
             meme.save_template(blob_key)
             self.response.out.write(blob_key) #TODO
         else:
-            self.response.out.write(meme.make_meme(blob_key, top_caption, bottom_caption, style)) #TODO
+            self.response.out.write(meme.make_meme(blob_key, top_caption, bottom_caption, style, self.uid)) #TODO
             
     def get(self, template_id = None):
         url = self.request.get('url')

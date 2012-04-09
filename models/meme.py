@@ -95,7 +95,7 @@ def generate_meme_image(blob_key, top_caption, bottom_caption, style):
     return None
     
 # Build a Meme and put in datastore, return numeric ID if success, -1 if failed
-def make_meme(blob_key, top_caption, bottom_caption, style):
+def make_meme(blob_key, top_caption, bottom_caption, style, uid):
     template_info = get_template(blob_key)
     if not template_info:
         return -1
@@ -109,6 +109,7 @@ def make_meme(blob_key, top_caption, bottom_caption, style):
                 original_width = template_info.width,
                 original_height = template_info.height,
                 date = datetime.datetime.now(),
+                user = uid,
                 captions = [top_caption, bottom_caption])
     meme.put()
     return meme.key().id()
@@ -176,7 +177,7 @@ class Template(db.Model):
         return {
           "blob_key": self.blob_key,
           "like": self.like,
-          "date": self.date
+          "date": str(self.date)
         }
 
 
