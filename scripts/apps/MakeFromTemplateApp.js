@@ -5,6 +5,10 @@ define(function(require, exports) {
 			console.log(Backbone);
             var GalleryView = require('../views/GalleryView.js');
             var galleryView = new GalleryView({el:'#gallery'});
+            window.onresize = function() {
+                galleryView.relayout();
+            };
+            galleryView.loadMore();
             galleryView.render();
 		}
 	});
