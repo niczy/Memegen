@@ -159,7 +159,9 @@ class Meme(db.Model):
           "like": self.like,
           "dislike": self.dislike,
           "description": self.description,
-          "date": str(self.date)
+          "date": str(self.date),
+          "width": self.original_width,
+          "height": self.original_height
         }
 
 class Template(db.Model):
@@ -177,6 +179,8 @@ class Template(db.Model):
         return {
           "blob_key": self.blob_key,
           "like": self.like,
+          "width": self.width,
+          "height": self.height,
           "date": str(self.date)
         }
 
