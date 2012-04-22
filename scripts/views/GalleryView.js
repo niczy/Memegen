@@ -6,21 +6,37 @@ define(function(require, exports) {
 	var GalleryView = Backbone.View.extend({
 		events: {
 		},
-		colomnWidth: 250,
+
+		columnWidth: 250,
+
+        memeThumViews: [],
+
+        columns: [],
+
 		el: '#gallery',
+
 		initialize: function() {
             this.relayout();
 		},
 
 		loadMore: function() {
+            var MemeThumView = require('./MemeThumView.js');
 			console.log("load more called.");
 			var memeCollection = new MemeCollection();
+            var that = this;
 			memeCollection.fetch({
 				"success": function(collection, response) {
-					collection.each(function(memeModel) {});
+					collection.each(function(memeModel) {
+                        memeThumView = new MemeThumView({
+                                model : memeModel,
+                                width : that.columnWidth
+                        });
+                        memeThumView.render();
+                        that.memeThumViews.push(memeThumView);
+                        $(that.columns[0]).append(memeThumView.el);
+                    });
 				}
 			});
-
 		},
 
         click: function() {
@@ -33,12 +49,17 @@ define(function(require, exports) {
 			this.width = $(this.el).width();
 			this.left = position.left;
 			this.right = position.right;
-			console.log("we have " + Math.floor(this.width / this.colomnWidth) + " columns");
-
+            this.columnCount = Math.floor(this.width / this.columnWidth);
+            this.render();
 		},
 
 		render: function() {
-			$(this.el).append("Hello world");
+            var GalleryTemplate = require('../templates/GalleryTemplate.js');
+            $(this.el).empty();
+            for (var i = 0; i < this.columnCount; i++) {
+                $(this.el).append(GalleryTemplate.columnTemplate());
+            }
+            this.columns = this.$('.column');
 		}
 	});
 	return GalleryView;

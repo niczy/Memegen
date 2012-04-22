@@ -7,6 +7,7 @@ define(function(require, exports) {
 		url: '/api/templatelist/popular',
 		model: MemeModel,
         parse: function(response) {
+
             return response;
         }
 	});
